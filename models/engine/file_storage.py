@@ -62,5 +62,5 @@ class FileStorage:
         """ delete obj from __objects if it’s inside
         if obj is equal to None, the method should not do anything """
         if obj:
-            del self.__objects[f"{type(obj).__name__}.{obj.id}"]
+            del self.__objects["{}.{}".format(type(obj).__name__, obj.id)]
             self.save()
