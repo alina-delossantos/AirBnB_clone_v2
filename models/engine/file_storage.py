@@ -63,3 +63,4 @@ class FileStorage:
         if obj is equal to None, the method should not do anything """
         if obj:
             del self.__objects[f"{type(obj).__name__}.{obj.id}"]
+            self.save()
