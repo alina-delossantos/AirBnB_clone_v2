@@ -127,7 +127,11 @@ class HBNBCommand(cmd.Cmd):
             sub_elem = elem.split("=")
             key = sub_elem[0]
             value = sub_elem[1].replace("_", " ")
-            setattr(new_object, key, eval(value))
+            if hasattr(new_object, key):
+                try:
+                    setattr(new_object, key, eval(value))
+                except Exception:
+                    pass
         print(new_object.id)
         new_object.save()
 
