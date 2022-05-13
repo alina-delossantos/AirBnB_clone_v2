@@ -6,18 +6,21 @@ from flask import Flask
 
 app = Flask(__name__)
 
+
 @app.route('/', strict_slashes=False)
 def hello():
     """display “Hello HBNB!”"""
     return "Hello HBNB!"
+
 
 @app.route('/hbnb', strict_slashes=False)
 def hello_2():
     """display “HBNB”"""
     return "HBNB"
 
+
 @app.route('/c/<text>', strict_slashes=False)
-def hello_3():
+def hello_3(text):
     """display “C ” followed by the text variable"""
     text = text.replace("_", " ")
     return "C {}".format(text)
