@@ -9,20 +9,18 @@ class FileStorage:
     __objects = {}
 
     def all(self, cls=None):
-        """Returns a dictionary of models currently in storage
-        if obj is not None:
-        returns the list of objects of one type of class
-        """
-        if cls is not None:
-            obj_dict = {}
-            for k, v in self.__objects.items():
-                if cls == v.__class__:
-                    obj_dict[k] = v
-            return obj_dict
-        return FileStorage.__objects
+        """Returns a dictionary of models currently in storage"""
+        if (not cls):
+            return FileStorage.__objects
+        new_return = {}
+        for key, value in self.__objects.items():
+            if (cls == value.to_dict()['__class__'] or cls == type(value)):
+                new_return[key] = value
+        return (new_return)
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
+        key = '{}.{}'.format(obj.to_dict()['__class__'], obj.id)
         self.all().update({obj.to_dict()['__class__'] + '.' + obj.id: obj})
 
     def save(self):
@@ -58,9 +56,19 @@ class FileStorage:
         except FileNotFoundError:
             pass
 
+    def close(self):
+        """Reloads the __objects list from the storage"""
+        self.reload()
+
     def delete(self, obj=None):
-        """ delete obj from __objects if it’s inside
-        if obj is equal to None, the method should not do anything """
-        if obj:
-            del self.__objects["{}.{}".format(type(obj).__name__, obj.id)]
-            self.save()
+        """
+        delete obj from __objects if it’s inside
+        if obj is equal to None, the method should not do anything
+        """
+        if (obj):
+            try:
+                key = "{}.{}".format(obj.to_dict()['__class__'], obj.id)
+                self.__objects.pop(key)
+                self.save()
+            except Exception as Ex:
+                pass
